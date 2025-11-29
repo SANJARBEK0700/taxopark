@@ -21,16 +21,20 @@ class TaxiCar:
 
 
 class Driver:
-    def __init__(self, first_name, last_name, license_id):
+    def __init__(self, first_name, last_name, license_id, username, password):
         self.first_name = first_name
         self.last_name = last_name
         self.license_id = license_id
+        self.username = username
+        self.password = password
         self.rented_cars = []
 
 
 class Taxopark:
     def __init__(self):
         self.balance = 0
+        self.username = "admin"
+        self.password = 8086
         self.cars = []
         self.drivers = []
 
@@ -73,7 +77,9 @@ class Taxopark:
         fist_name = input('Enter driver first name: ')
         last_name = input('Enter driver last name: ')
         license_id = input('Enter driver license_id: ')
-        driver = Driver(fist_name, last_name, license_id)
+        username = input('Enter driver username: ')
+        password = int(input('Enter driver password: '))
+        driver = Driver(fist_name, last_name, license_id, username, password)
         self.drivers.append(driver)
 
     def del_driver(self):
@@ -178,35 +184,76 @@ class Taxopark:
 
         if not found:
             print("No rented cars in the taxopark")
+    def edit_driver(self):
+        print("=== Edit driver ===")
+        count = 0
+        for driver in self.drivers:
+            count += 1
+            if not self.drivers:
+                print("There is no driver in taxopark")
+            else:
+                print("=== Drivers ===")
+                print(f' {count}. Fistname: {driver.first_name} \n    Lastname: {driver.last_name}\n    License number: {driver.license_id}')
+            index = int(input('Enter driver index that you want to edit: '))
+            new_firs_name = input("Enter new driver name: ")
+            new_last_name = input("Enter new driver last name: ")
+            new_license_id = input("Enter your new license id: ")
+            new_username = input("Enter new username: ")
+            new_password = int(input("Enter new password: "))
+            self.drivers[index-1].first_name = new_firs_name
+            self.drivers[index-1].last_name = new_last_name
+            self.drivers[index-1].license_id = new_license_id
+            self.drivers[index-1].username = new_username
+            self.drivers[index-1].password = new_password
+
 
 
 def park_manager(p: Taxopark):
     while True:
-        kod = int(input(" 1. Add car \n 2. Delete car \n 3. View cars \n 4. Add Driver \n 5. Delete Driver \n 6. View Drivers' details \n 7. Giving car to the Driver \n 8. Taking car from the Driver \n 9. View rented cars \n 10. Exit \n Choose => "))
-        if kod == 1:
-            p.add_car()
-        elif kod == 2:
-            p.del_car()
-        elif kod == 3:
-            p.view_cars()
-        elif kod == 4:
-            p.add_driver()
-        elif kod == 5:
-            p.del_driver()
-        elif kod == 6:
-            p.view_drivers()
-        elif kod == 7:
-            p.give_car()
-        elif kod == 8:
-            p.take_car()
-        elif kod == 9:
-            p.view_rented_cars()
-        elif kod == 10:
-            break
-        elif kod =="":
-            print("Write a command")
+        username = input('Enter username: ')
+        password = int(input('Enter password: '))
+        if p.username == username and p.password == password:
+            print("=== Welcome to ADMMIN PANEL ===")
+            kod = int(input(" 1. Add car \n 2. Delete car \n 3. View cars \n 4. Add Driver \n 5. Delete Driver \n 6. View Drivers' details \n 7. Giving car to the Driver \n 8. Taking car from the Driver \n 9. View rented cars \n 10. Exit \n Choose => "))
+            if kod == 1:
+                p.add_car()
+            elif kod == 2:
+                p.del_car()
+            elif kod == 3:
+                p.view_cars()
+            elif kod == 4:
+                p.add_driver()
+            elif kod == 5:
+                p.del_driver()
+            elif kod == 6:
+                p.view_drivers()
+            elif kod == 7:
+                p.give_car()
+            elif kod == 8:
+                p.take_car()
+            elif kod == 9:
+                p.view_rented_cars()
+            elif kod == 10:
+                park_manager(Taxopark())
+            elif kod =="":
+                print("Write a command")
+            else:
+                print("Wrong command!!!")
         else:
-            print("Wrong command!!!")
+            for item in p.drivers:
+                if item.username == username and item.password == password:
+                    print("=== Welcome to DRIVER PANEL ===")
+                    kod = int(input(" 1. View available cars \n 2. Edit your data \n 3. Exit \n Choose => "))
+                    if kod == 1:
+                        p.view_cars()
+                    elif kod == 2:
+                        p.edit_driver()
+                    elif kod == 3:
+                        break
+                    else:
+                        print("Wrong command!!!")
+            print("Wrong PCommand")
+
 
 park_manager(Taxopark())
 
